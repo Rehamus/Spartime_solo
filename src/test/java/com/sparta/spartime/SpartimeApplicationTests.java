@@ -1,0 +1,13 @@
+package com.sparta.spartime;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class SpartimeApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}

@@ -1,0 +1,55 @@
+### 게시글 작성
+POST localhost:8080/api/posts
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title": "title",
+  "content": "content"
+}
+
+> {%
+    client.global.set("postId", response.body.data.id)
+ %}
+
+### 댓글 작성
+POST localhost:8080/api/posts/{{postId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "contents": "contents"
+}
+
+> {%
+ client.global.set("id", response.body.data.id)
+ %}
+
+### 댓글 조회
+GET localhost:8080/api/posts/{{postId}}/comments
+Content-Type: application/json
+
+### 댓글 수정
+PATCH localhost:8080/api/posts/{{postId}}/comments/{{id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "contents": "update"
+}
+
+### 댓글 좋아요
+POST localhost:8080/api/posts/{{postId}}/comments/{{id}}/like
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### 댓글 좋아요 취소
+DELETE localhost:8080/api/posts/{{postId}}/comments/{{id}}/like
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### 댓글 삭제
+DELETE localhost:8080/api/posts/{{postId}}/comments/{{id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+

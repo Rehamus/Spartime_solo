@@ -1,0 +1,54 @@
+
+### post create
+POST localhost:8080/api/posts
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title": "제목",
+  "content": "내용"
+}
+
+> {%
+    client.global.set("post_id", response.body.data.id)
+    client.global.set("refresh_token", response.body.data.refreshToken)
+%}
+
+### post get
+GET localhost:8080/api/posts/{{post_id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### post update
+PATCH localhost:8080/api/posts/{{post_id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title": "제목",
+  "content": "업데이트 내용"
+}
+
+### post like
+POST localhost:8080/api/posts/{{post_id}}/like
+Authorization: Bearer {{access_token}}
+
+### post unlike
+DELETE localhost:8080/api/posts/{{post_id}}/like
+Authorization: Bearer {{access_token}}
+
+### post getPage
+GET http://localhost:8080/api/posts?page=1&size=10&type=NORMAL
+Authorization: Bearer {{access_token}}
+
+
+### post delete
+DELETE localhost:8080/api/posts/{{post_id}}
+Authorization: Bearer {{access_token}}
+
+
+
+
+
+
