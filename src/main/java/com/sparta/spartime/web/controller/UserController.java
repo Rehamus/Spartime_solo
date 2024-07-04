@@ -10,7 +10,6 @@ import com.sparta.spartime.security.principal.UserPrincipal;
 import com.sparta.spartime.service.UserService;
 import com.sparta.spartime.web.argumentResolver.annotation.LoginUser;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

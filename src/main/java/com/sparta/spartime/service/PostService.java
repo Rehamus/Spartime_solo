@@ -5,7 +5,7 @@ import com.sparta.spartime.dto.response.PostResponseDto;
 import com.sparta.spartime.entity.Like;
 import com.sparta.spartime.entity.Post;
 import com.sparta.spartime.entity.User;
-import com.sparta.spartime.repository.LikeRepository;
+import com.sparta.spartime.repository.LikeRepository.LikeRepository;
 import com.sparta.spartime.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +19,7 @@ public class PostService {
     
     private final PostRepository postrepository;
     private final LikeRepository likeRepository;
+    private final LikeService likeService;
 
 
     public PostResponseDto create(PostRequestDto requestDto, User user ) {
@@ -72,27 +73,12 @@ public class PostService {
 
     @Transactional
     public void like(Long postId,User user) {
-        Post post = getPost(postId);
-
-        // 좋아요
-        if(likeRepository.existsByUser_IdAndReferenceTypeAndRefId(user.getId(), Like.ReferenceType.POST, postId)){
-            throw new IllegalArgumentException("이미 좋아요를 눌렀습니다");
-        }
-        Like like = new Like(user,post);
-        post.Likes(post.getLikes()+1);
-        likeRepository.save(like);
+        likeService.like(user, Like.ReferenceType.POST, postId);
     }
 
     @Transactional
     public void unlike(Long postId,User user) {
-        Post post = getPost(postId);
-
-        // 좋아요
-        Like like = likeRepository.findByUserIdAndReferenceTypeAndRefId(user.getId(), Like.ReferenceType.POST, postId).orElseThrow(
-                () -> new IllegalArgumentException("좋아요를 누르지 않았습니다.")
-        );
-        post.Likes(post.getLikes()-1);
-        likeRepository.delete(like);
+        likeService.unlike(user, Like.ReferenceType.POST, postId);
     }
 
 

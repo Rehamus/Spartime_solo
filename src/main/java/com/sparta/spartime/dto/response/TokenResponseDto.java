@@ -1,6 +1,5 @@
 package com.sparta.spartime.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

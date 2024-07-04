@@ -4,6 +4,8 @@ import com.sparta.spartime.entity.common.TimeStamp;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
