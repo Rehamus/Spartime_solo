@@ -2,12 +2,16 @@ package com.sparta.spartime.web.controller;
 
 import com.sparta.spartime.dto.request.CommentRequestDto;
 import com.sparta.spartime.dto.response.CommentResponseDto;
+import com.sparta.spartime.dto.response.PostResponseDto;
 import com.sparta.spartime.entity.User;
+import com.sparta.spartime.security.principal.UserPrincipal;
 import com.sparta.spartime.service.CommentService;
 import com.sparta.spartime.web.argumentResolver.annotation.LoginUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,7 +54,7 @@ public class CommentController {
     public ResponseEntity<?> likeComment(@LoginUser User user,
                                          @PathVariable("postId") Long postId,
                                          @PathVariable("commentId") Long commentId) {
-        commentService.likeComment(user, commentId);
+        commentService.likeComment(user,postId, commentId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -58,7 +62,9 @@ public class CommentController {
     public ResponseEntity<?> unlikeComment(@LoginUser User user,
                                          @PathVariable("postId") Long postId,
                                          @PathVariable("commentId") Long commentId) {
-        commentService.unlikeComment(user, commentId);
+        commentService.unlikeComment(postId,user, commentId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+
 }

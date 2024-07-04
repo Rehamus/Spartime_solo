@@ -4,13 +4,18 @@ import com.sparta.spartime.aop.envelope.Envelope;
 import com.sparta.spartime.dto.request.UserEditProfileRequestDto;
 import com.sparta.spartime.dto.request.UserSignupRequestDto;
 import com.sparta.spartime.dto.request.UserWithdrawRequestDto;
+import com.sparta.spartime.dto.response.CommentResponseDto;
+import com.sparta.spartime.dto.response.PostResponseDto;
 import com.sparta.spartime.dto.response.UserResponseDto;
 import com.sparta.spartime.entity.User;
 import com.sparta.spartime.security.principal.UserPrincipal;
+import com.sparta.spartime.service.CommentService;
+import com.sparta.spartime.service.PostService;
 import com.sparta.spartime.service.UserService;
 import com.sparta.spartime.web.argumentResolver.annotation.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final CommentService commentService;
+    private final PostService postService;
 
     @PostMapping
     public ResponseEntity<UserResponseDto> signup(@Valid @RequestBody UserSignupRequestDto requestDto)  {
@@ -51,5 +58,23 @@ public class UserController {
     public ResponseEntity<Void> logout(@LoginUser User user) {
         userService.logout(user);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/liked/comments")
+    public ResponseEntity<Page<CommentResponseDto>> getLikeCommentsPage(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "0") int asc,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(commentService.getLikePage(page-1,size,userPrincipal.getUser(),asc));
+    }
+
+    @GetMapping("/liked/posts")
+    public ResponseEntity<Page<PostResponseDto>> getLikePostPage(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "0") int asc,
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(postService.getLikePage(page-1,size,userPrincipal.getUser(),asc));
     }
 }

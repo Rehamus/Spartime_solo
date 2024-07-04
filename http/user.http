@@ -1,10 +1,6 @@
 
 ### 회원가입
 POST localhost:8080/api/users
-
-
-### 회원가입
-POST localhost:8080/api/users
 Content-Type: application/json
 
 {
@@ -19,10 +15,32 @@ POST localhost:8080/api/users
 Content-Type: application/json
 
 {
-  "email": "test@gmail.com",
+  "email": "test2@gmail.com",
   "password": "qwer1234!",
   "intro": "im second",
   "nickname": "second"
+}
+
+### 회원가입
+POST localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "email": "test3@gmail.com",
+  "password": "qwer1234!",
+  "intro": "im three",
+  "nickname": "three"
+}
+
+### 회원가입
+POST localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "email": "test4@gmail.com",
+  "password": "qwer1234!",
+  "intro": "im three",
+  "nickname": "a"
 }
 
 ### 회원탈퇴

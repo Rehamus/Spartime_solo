@@ -42,6 +42,8 @@ public class UserService {
                 .intro(intro)
                 .role(User.Role.USER)
                 .status(User.Status.ACTIVITY)
+                .postLiked(0L)
+                .commentLiked(0L)
                 .build();
 
         // return

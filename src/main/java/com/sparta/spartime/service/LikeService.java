@@ -9,15 +9,18 @@ import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.repository.LikeRepository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class LikeService {
+
     private final LikeRepository likeRepository;
     private final JPAQueryFactory queryFactory;
 
+    @Transactional
     public void like(User user, Like.ReferenceType refType, Long refId) {
         Like like = findLikeBy(user.getId(), refType, refId);
         if (like != null) {
@@ -33,6 +36,7 @@ public class LikeService {
         );
     }
 
+    @Transactional
     public void unlike(User user, Like.ReferenceType refType, Long refId) {
         Like like = findLikeBy(user.getId(), refType, refId);
         if (like == null) {

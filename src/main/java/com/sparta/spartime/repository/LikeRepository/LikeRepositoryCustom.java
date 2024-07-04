@@ -1,8 +1,10 @@
 package com.sparta.spartime.repository.LikeRepository;
 
-import com.sparta.spartime.entity.Like;
+import com.sparta.spartime.entity.Comment;
+import com.sparta.spartime.entity.Post;
+import org.springframework.data.domain.Page;
 
 public interface LikeRepositoryCustom {
-    boolean existsByUserIdAndReferenceTypeAndRefId(Long userId, Like.ReferenceType referenceType, Long refId);
-    Like findByUserIdAndReferenceTypeAndRefId(Long userId, Like.ReferenceType referenceType, Long refId);
+    Page<Post> getPostsLikedByUser(Long userId, int page, int size,  int asc);
+    Page<Comment> getCommentsLikedByUser(Long userId, int page, int size, int asc);
 }

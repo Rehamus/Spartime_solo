@@ -1,12 +1,25 @@
+### login
+POST localhost:8080/api/auth/login
+Content-Type: application/json
 
-### post create
+{
+  "email": "test2@gmail.com",
+  "password": "qwer1234!"
+}
+> {%
+    client.global.set("access_token", response.body.data.accessToken)
+    client.global.set("refresh_token", response.body.data.refreshToken)
+%}
+
+
+### post create 3회 해주세요
 POST localhost:8080/api/posts
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-  "title": "제목",
-  "content": "내용"
+  "title": "zzz",
+  "content": "zz"
 }
 
 > {%
@@ -15,10 +28,9 @@ Authorization: Bearer {{access_token}}
 %}
 
 ### post get
-GET localhost:8080/api/posts/{{post_id}}
+GET localhost:8080/api/posts/2
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
-
 
 ### post update
 PATCH localhost:8080/api/posts/{{post_id}}
@@ -30,16 +42,55 @@ Authorization: Bearer {{access_token}}
   "content": "업데이트 내용"
 }
 
-### post like
+
+
+
+
+### post 본인것을 추천할떄 -> 에러
 POST localhost:8080/api/posts/{{post_id}}/like
 Authorization: Bearer {{access_token}}
 
-### post unlike
-DELETE localhost:8080/api/posts/{{post_id}}/like
+### 로그아웃
+DELETE localhost:8080/api/users
+Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+### 다른 아이디 login
+POST localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test3@gmail.com",
+  "password": "qwer1234!"
+}
+> {%
+    client.global.set("access_token", response.body.data.accessToken)
+    client.global.set("refresh_token", response.body.data.refreshToken)
+%}
+
+
+
+### post like
+POST localhost:8080/api/posts/19/like
+Authorization: Bearer {{access_token}}
+
+### post like
+POST localhost:8080/api/posts/20/like
+Authorization: Bearer {{access_token}}
+
+### post like
+POST localhost:8080/api/posts/3/like
+Authorization: Bearer {{access_token}}
+
+
+
 
 ### post getPage
 GET http://localhost:8080/api/posts?page=1&size=10&type=NORMAL
+Authorization: Bearer {{access_token}}
+
+### post getLikedPage
+GET http://localhost:8080/api/users/liked/posts
 Authorization: Bearer {{access_token}}
 
 

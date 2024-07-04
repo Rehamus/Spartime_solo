@@ -40,6 +40,10 @@ public class User extends TimeStamp {
 
     private Long socialId;
 
+    private Long postLiked;
+
+    private Long commentLiked;
+
     public void changeRole(Role role) {
         this.role = role;
     }
@@ -47,6 +51,8 @@ public class User extends TimeStamp {
     public void changeStatus(Status status) {
         this.status = status;
     }
+
+
 
     public enum Role {
         USER,
@@ -80,6 +86,14 @@ public class User extends TimeStamp {
         this.refreshToken = null;
         this.socialId = socialId;
         return this;
+    }
+
+    public void setpostLiked(Long num) {
+        this.postLiked = num;
+    }
+
+    public void setCommentLiked(Long num) {
+        this.postLiked = num;
     }
 
     public void withdraw() {

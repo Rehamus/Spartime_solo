@@ -9,7 +9,10 @@ import com.sparta.spartime.entity.User;
 import com.sparta.spartime.exception.BusinessException;
 import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.repository.CommentRepository;
+import com.sparta.spartime.repository.LikeRepository.LikeRepository;
+import com.sparta.spartime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +24,9 @@ import java.util.Objects;
 public class CommentService {
     private final PostService postService;
     private final LikeService likeService;
+    private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     public CommentResponseDto createComment(User user, Long postId, CommentRequestDto requestDto) {
         Post post = postService.getPost(postId);
@@ -30,6 +35,7 @@ public class CommentService {
                 .user(user)
                 .post(post)
                 .contents(requestDto.getContents())
+                .likes(0L)
                 .build();
 
         return new CommentResponseDto(commentRepository.save(comment));
@@ -69,12 +75,30 @@ public class CommentService {
             throw new BusinessException(ErrorCode.COMMENT_NOT_USER);
         }
     }
-
-    public void likeComment(User user, Long commentId) {
+    @Transactional
+    public void likeComment(User user,Long postId, Long commentId) {
+        Comment comment = findComment(postId, commentId);
+        if (user.getId().equals(comment.getUser().getId())){
+            throw new BusinessException(ErrorCode.LIKE_NO_MY_FOUND);
+        }
         likeService.like(user, Like.ReferenceType.COMMENT, commentId);
+        liked(comment , 1L);
+    }
+    @Transactional
+    public void unlikeComment(Long postId, User user, Long commentId) {
+        Comment comment = findComment(postId, commentId);
+        likeService.unlike(user, Like.ReferenceType.COMMENT, commentId);
+        liked(comment , -1L);
     }
 
-    public void unlikeComment(User user, Long commentId) {
-        likeService.unlike(user, Like.ReferenceType.COMMENT, commentId);
+
+
+    public Page<CommentResponseDto> getLikePage(int page, int size , User user ,int sac) {
+        return likeRepository.getCommentsLikedByUser(user.getId(),page,size,sac).map(CommentResponseDto::new);
+    }
+
+    private static void liked(Comment comment , Long num) {
+        comment.getUser().setCommentLiked(comment.getUser().getCommentLiked() + num);
+        comment.Likes(comment.getLikes() + num);
     }
 }

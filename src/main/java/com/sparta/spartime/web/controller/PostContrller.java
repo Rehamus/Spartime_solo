@@ -73,4 +73,5 @@ public class PostContrller {
         postService.unlike(postId,userPrincipal.getUser());
         return ResponseEntity.noContent().build();
     }
+
 }

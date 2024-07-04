@@ -5,8 +5,11 @@ import com.sparta.spartime.dto.response.PostResponseDto;
 import com.sparta.spartime.entity.Like;
 import com.sparta.spartime.entity.Post;
 import com.sparta.spartime.entity.User;
+import com.sparta.spartime.exception.BusinessException;
+import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.repository.LikeRepository.LikeRepository;
 import com.sparta.spartime.repository.PostRepository;
+import com.sparta.spartime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +22,7 @@ public class PostService {
     
     private final PostRepository postrepository;
     private final LikeRepository likeRepository;
+    private final UserRepository userRepository;
     private final LikeService likeService;
 
 
@@ -73,28 +77,45 @@ public class PostService {
 
     @Transactional
     public void like(Long postId,User user) {
+        Post post = getPost(postId);
+        if (user.getId().equals(post.getUser().getId())){
+            throw new BusinessException(ErrorCode.LIKE_NO_MY_FOUND);
+        }
         likeService.like(user, Like.ReferenceType.POST, postId);
+        liked(post, 1L);
     }
 
     @Transactional
     public void unlike(Long postId,User user) {
+        Post post = getPost(postId);
         likeService.unlike(user, Like.ReferenceType.POST, postId);
+        liked(post, -1L);
+
     }
 
+    @Transactional
+    public void liked(Post post, Long num) {
+        User user = userRepository.findById(post.getUser().getId()).orElseThrow(null);
+        user.setpostLiked(user.getPostLiked() + num);
+        post.Likes(post.getLikes()+num);
+    }
 
+    public Page<PostResponseDto> getLikePage(int page, int size ,User user ,int asc) {
+        return likeRepository.getPostsLikedByUser(user.getId(),page,size,asc).map(PostResponseDto::new);
+    }
 
 
     //:::::::::::::::::::// 도구 //::::::::::::::::::://
 
     public Post getPost(Long postId) {
         return postrepository.findById(postId).orElseThrow(
-                () -> new IllegalArgumentException("없는 게시글 입니다.")
+                () -> new BusinessException(ErrorCode.POST_NOT_FOUND)
         );
     }
 
     private void userCheck(User user, Post post) {
         if(!post.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("게시판 주인이 아닙니다.");
+            throw new BusinessException(ErrorCode.POST_NOT_USER);
         }
     }
 }

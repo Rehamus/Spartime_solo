@@ -29,7 +29,14 @@ public class Comment extends TimeStamp {
 
     private String contents;
 
+    private Long likes;
+
+
     public void updateComment(String contents) {
         this.contents = contents;
     }
+    public void Likes(Long likes) {
+        this.likes = likes;
+    }
+
 }
