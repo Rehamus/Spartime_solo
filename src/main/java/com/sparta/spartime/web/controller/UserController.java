@@ -8,6 +8,7 @@ import com.sparta.spartime.dto.response.CommentResponseDto;
 import com.sparta.spartime.dto.response.PostResponseDto;
 import com.sparta.spartime.dto.response.UserResponseDto;
 import com.sparta.spartime.entity.User;
+import com.sparta.spartime.repository.LikeRepository.LikeRepository;
 import com.sparta.spartime.security.principal.UserPrincipal;
 import com.sparta.spartime.service.CommentService;
 import com.sparta.spartime.service.PostService;
@@ -28,6 +29,7 @@ public class UserController {
     private final UserService userService;
     private final CommentService commentService;
     private final PostService postService;
+    private final LikeRepository likeRepository;
 
     @PostMapping
     public ResponseEntity<UserResponseDto> signup(@Valid @RequestBody UserSignupRequestDto requestDto)  {
@@ -66,7 +68,8 @@ public class UserController {
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "0") int asc,
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(commentService.getLikePage(page-1,size,userPrincipal.getUser(),asc));
+        return ResponseEntity.ok(likeRepository.getCommentsLikedByUser(userPrincipal.getUser().getId(),page,size,asc)
+                                         .map(CommentResponseDto::new));
     }
 
     @GetMapping("/liked/posts")

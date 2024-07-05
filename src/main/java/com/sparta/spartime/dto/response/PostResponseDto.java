@@ -2,10 +2,12 @@ package com.sparta.spartime.dto.response;
 
 import com.sparta.spartime.entity.Post;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @AllArgsConstructor
 public class PostResponseDto {

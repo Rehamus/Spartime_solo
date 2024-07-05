@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableAspectJAutoProxy
 @SpringBootApplication
-@EnableJpaAuditing
 public class SpartimeApplication {
 
     public static void main(String[] args) {
