@@ -91,10 +91,8 @@ public class CommentService {
         liked(comment , -1L);
     }
 
-
-
-    public Page<CommentResponseDto> getLikePage(int page, int size , User user ,int sac) {
-        return likeRepository.getCommentsLikedByUser(user.getId(),page,size,sac).map(CommentResponseDto::new);
+    public Page<CommentResponseDto> getLikePage( Long user,int page, int size,int asc) {
+        return likeRepository.getCommentsLikedByUser(user,page,size,asc).map(CommentResponseDto::new);
     }
 
     private static void liked(Comment comment , Long num) {

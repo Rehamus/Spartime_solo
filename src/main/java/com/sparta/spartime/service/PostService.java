@@ -93,15 +93,9 @@ public class PostService {
 
     }
 
-    @Transactional
-    public void liked(Post post, Long num) {
-        User user = userRepository.findById(post.getUser().getId()).orElseThrow(null);
-        user.setpostLiked(user.getPostLiked() + num);
-        post.Likes(post.getLikes()+num);
-    }
 
-    public Page<PostResponseDto> getLikePage(int page, int size ,User user ,int asc) {
-        return likeRepository.getPostsLikedByUser(user.getId(),page,size,asc).map(PostResponseDto::new);
+    public Page<PostResponseDto> getLikePage( Long user,int page, int size,int asc) {
+        return likeRepository.getPostsLikedByUser(user,page,size,asc).map(PostResponseDto::new);
     }
 
 
@@ -111,6 +105,13 @@ public class PostService {
         return postrepository.findById(postId).orElseThrow(
                 () -> new BusinessException(ErrorCode.POST_NOT_FOUND)
         );
+    }
+
+    @Transactional
+    public void liked(Post post, Long num) {
+        User user = userRepository.findById(post.getUser().getId()).orElseThrow(null);
+        user.setpostLiked(user.getPostLiked() + num);
+        post.Likes(post.getLikes()+num);
     }
 
     private void userCheck(User user, Post post) {

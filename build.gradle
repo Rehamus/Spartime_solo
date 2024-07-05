@@ -69,6 +69,9 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.8.0'
     testImplementation 'org.mockito:mockito-junit-jupiter'
 
+    //fixturemonkey
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:0.3.2")
+
 }
 
 tasks.named('test') {

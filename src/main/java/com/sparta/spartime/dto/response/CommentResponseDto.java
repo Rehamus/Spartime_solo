@@ -2,12 +2,14 @@ package com.sparta.spartime.dto.response;
 
 import com.sparta.spartime.entity.Comment;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
+@Builder
 public class CommentResponseDto {
     private Long id;
     private String email;

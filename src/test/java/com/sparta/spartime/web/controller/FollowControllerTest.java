@@ -6,7 +6,10 @@ import com.sparta.spartime.filter.TestMockFilter;
 import com.sparta.spartime.searchCond.PostSearchCond;
 import com.sparta.spartime.security.config.SecurityConfig;
 import com.sparta.spartime.security.principal.UserPrincipal;
+import com.sparta.spartime.service.CommentService;
 import com.sparta.spartime.service.FollowService;
+import com.sparta.spartime.service.PostService;
+import com.sparta.spartime.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,7 @@ import java.util.Collections;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 
 @WebMvcTest(
@@ -50,14 +54,15 @@ public class FollowControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+
     @MockBean
     private FollowService followService;
 
     @MockBean
     private UserPrincipal userPrincipal;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
 
     @BeforeEach
@@ -107,12 +112,11 @@ public class FollowControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].title").value("Test Title"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].content").value("Test Contents"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].content").value("Test Contents"))
+                .andDo(print());
 
         // Verify that followService's method was called with correct arguments
         verify(followService, times(1)).followingPost(any(PostSearchCond.class), eq(0), eq(5), eq(0));
     }
-    @Test
-    void testFolloingPost() {
-    }
+
 }
